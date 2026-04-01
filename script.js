@@ -4,6 +4,7 @@ let songs;
 let cardContainer;
 let currFolder;
 let lastVolume;
+let albums = ["ABest", "Aditya Rikhari", "Angry_mood", "Arijit Singh", "Atif Aslam", "Karan Aujla", "Talwinder"];
 
 function secondsToMinutesSeconds(seconds) {
     if (isNaN(seconds) || seconds < 0) {
