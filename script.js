@@ -116,36 +116,26 @@ currentSong.addEventListener("ended" , () =>{
 
 async function displayAlbums() {
     console.log("displaying albums")
-    let a = await fetch(`s/`)
-    let response = await a.text();
-    let div = document.createElement("div")
-    div.innerHTML = response;
-    let anchors = div.getElementsByTagName("a")
     cardContainer = document.querySelector(".cardContainer")
-    let array = Array.from(anchors)
-    console.log(array);
-    for (let index = 0; index < array.length; index++) {
-        const e = array[index];
-        let cleanHref = decodeURIComponent(e.href).replace(/\\/g, "/")
-        if (cleanHref.includes("s/") && !cleanHref.includes(".htaccess")) {
-            console.log(cleanHref.split("/"))
-            let folder = cleanHref.split("/").slice(-2)[0]
+    cardContainer.innerHTML = "" // Clear the container
+
+    for (const folder of albums) {
+        try {
             // Get the metadata of the folder
             let a = await fetch(`s/${folder}/info.json`)
             let response = await a.json(); 
-            cardContainer.innerHTML = cardContainer.innerHTML + ` <div data-folder="${folder}" class="card">
-            <div class="play">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 20V4L19 12L5 20Z" stroke="#141B34" fill="#000" stroke-width="1.5"
-                        stroke-linejoin="round" />
-                </svg>
-            </div>
-
-            <img src="s/${folder}/cover.jpg" alt="">
-            <h2>${response.title}</h2>
-            <p>${response.description}</p>
-        </div>`
+            cardContainer.innerHTML += ` <div data-folder="${folder}" class="card">
+                <div class="play">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 20V4L19 12L5 20Z" stroke="#141B34" fill="#000" stroke-width="1.5" stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <img src="s/${folder}/cover.jpg" alt="">
+                <h2>${response.title}</h2>
+                <p>${response.description}</p>
+            </div>`
+        } catch (error) {
+            console.error("Error loading album:", folder, error);
         }
     }
 
